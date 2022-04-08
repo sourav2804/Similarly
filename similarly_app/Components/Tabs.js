@@ -21,13 +21,14 @@ export default function Tabs() {
         tabBarShowLabel:false,
         tabBarStyle: {
           position: 'absolute',
-          bottom: 10,
+          bottom: 5,
           left: 5,
           right: 5,
           elevation:0 ,
           backgroundColor:"white",
           borderRadius:20,
           height:60,
+          
           ...styles.shadow,
         }
       }}

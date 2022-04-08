@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import {
   StyleSheet,
   Text,
@@ -13,15 +12,48 @@ import {
   keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-import Tags from "../component/Tags";
+
+import { getDatabase, onValue,ref, set } from "firebase/database";
+import db from '../Firebase/firebase';
+import Tags from "./Tags";
+
+
 
 export default function HomeScreen({ navigation }) {
   const [tags, setTags] = useState();
   const [tagItems, setTagItems] = useState([]);
-
+  var count;
   const handelAddTags = () => {
+    if(tags!=null){
     setTagItems([...tagItems, tags]);
+    writeTagToDatabase(tags);
     setTags(null);
+    }
+  };
+  function writeTagToDatabase(tags) {
+    //const tagItemRef = ref(db, "/");
+    const tagTableRef = ref(db, "/tagTable/");
+    let length=0 ;
+    onValue(tagTableRef, (snapshot) => {
+      const data = snapshot.val();
+      length = data.length;
+
+      console.log('length',length);
+
+      
+    });
+    console.log('path','tagTable/'+length);
+  
+      set(ref(db, 'tagTable/'+length), {
+        'tagItem':tags
+      });
+    // console.log('its working here')
+  }
+
+  const removeTags = (index) => {
+    let tagItemsCopy = [...tagItems];
+    tagItemsCopy.splice(index, 1);
+    setTagItems(tagItemsCopy);
   };
   return (
     // This is the whole container of the homescreen
@@ -49,13 +81,37 @@ export default function HomeScreen({ navigation }) {
 
       <View style={styles.myTagArea}>
         <Text style={styles.sectionTitle}>My Tags</Text>
-        <View style={styles.tagStyle}>
+        {/* <View style={styles.tagStyle}> */}
           {/* This is where the tasks will go */}
 
-          {tagItems.map((item, index) => {
-            return <Tags key={index} text={item} />;
-          })}
-        </View>
+          {/* {tagItems.map((item, index) => {
+            return ( */}
+
+          <FlatList
+            style={styles.tagStyle}
+            data={tagItems}
+            keyExtractor={(item)=> item.id}
+            renderItem={({ item }) => (
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Tags text={item} />
+                <TouchableOpacity  onPress={() => removeTags()}>
+                  <Image
+                    source={require("../assets/Icons/delete.png")}
+                    resizeMode="contain"
+                    style={{
+                      height: 40,
+                      width: 40,
+                      marginBottom: 20,
+                      marginTop: 10,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+          {/* //   ); */}
+          {/* // })} */}
+        {/* </View> */}
       </View>
     </View>
   );
@@ -69,7 +125,7 @@ const styles = StyleSheet.create({
   myTagArea: {
     flex: 6,
     backgroundColor: "lightsteelblue",
-    alignItems: "center",
+    marginBottom: 70,
   },
 
   input: {
@@ -95,15 +151,17 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
+    alignSelf: "center",
   },
   createTagArea: {
-    flex: 3,
+    flex: 2,
     backgroundColor: "lightslategrey",
   },
 
   tagStyle: {
-    paddingTop: 40,
-    paddingHorizontal: 20,
-    marginTop: 1,
+    paddingTop: 10,
+    paddingBottom: 40,
+    paddingHorizontal: 10,
+    alignSelf:'center'
   },
 });
