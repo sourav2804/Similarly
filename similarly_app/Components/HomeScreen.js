@@ -105,7 +105,7 @@ export default function HomeScreen({ navigation }) {
   style={styles.createTagArea}
 >   
       {/* This is the CreateTag area in HomeScreen */}
-      
+
       {/* <View style={styles.createTagArea}> */}
         <TextInput
           style={styles.input}
@@ -118,7 +118,7 @@ export default function HomeScreen({ navigation }) {
 
         <TouchableOpacity onPress={() => handelAddTags()}>
           <View style={styles.createWrapper}>
-            <Text style={{fontWeight:"bold",color:'black'}}> CREATE TAG</Text>
+            <Text style={{fontWeight:"bold",color:'black',alignSelf:'center'}}> CREATE TAG</Text>
           </View>
         </TouchableOpacity>
 
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   createWrapper: {
     backgroundColor: "#d4fae7",
     height: 40,
-    width: 90,
+    width: 120,
     justifyContent: "center",
     alignContent:"center",
     alignSelf:"center",

@@ -1,5 +1,7 @@
+// ==============================================================
 // For more Features to implement in the future.
 // Excluded as of now for CS 855 final project submission.
+// ==============================================================
 
 import React, { Component, useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";

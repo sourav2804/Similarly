@@ -23,10 +23,10 @@ const styles = StyleSheet.create ({
     
     borderRadius:10,
     flexDirection:'row',
-    justifyContent:'space-between',
+    // justifyContent:'space-between',
     alignItems:'center',
     marginBottom:20,
-    marginRight:2,
+    //marginRight:2,
     flexWrap:'wrap',
     // marginLeft:0
     },          

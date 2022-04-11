@@ -1,5 +1,7 @@
+// ==============================================================
 // For more Features to implement in the future.
 // Excluded as of now for CS 855 final project submission.
+// ==============================================================
 
 import  React from 'react';
 import { StyleSheet, Text, View, Pressable, Image,FlatList } from "react-native";

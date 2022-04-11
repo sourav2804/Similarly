@@ -1,3 +1,4 @@
+// ==============================================================
 // In this file I fetch the stored tag data from firebase
 // and display it in a flatlist view within explore screen
 // ==============================================================
@@ -17,8 +18,9 @@ import {
   TouchableOpacity,
   Button,
   ImageBackground,
+  LogBox,
 } from "react-native";
-
+LogBox.ignoreAllLogs(true);
 import Tags from "./Tags";
 
 // ==============================================================
@@ -33,6 +35,8 @@ export default function ExploreScreen({ navigation }) {
   const [tagItems, setTagItems] = useState([]);
 
   const tagTableRef = ref(db, "/tagTable/");
+  
+
 
   // ==============================================================
   // useEffect hook was used to execute
@@ -110,12 +114,13 @@ export default function ExploreScreen({ navigation }) {
 
     return (
       <View style={styles.showUpVote}>
-        <Text style={styles.showUpVoteText}>❤️ {count}</Text>
+        <Text style={styles.showUpVoteText}> ❤️</Text>
+        <Text style={styles.showUpVoteText}>  {count}</Text>
       </View>
     );
   };
 
-  let count = 0;
+  //let count = 0;
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -129,7 +134,7 @@ export default function ExploreScreen({ navigation }) {
           style={styles.tagStyle}
           data={tagItems}
           //numColumns={2}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => {return item.tagId}}
           renderItem={({ item }) => (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Tags text={item.tagItem} />
@@ -176,10 +181,10 @@ const styles = StyleSheet.create({
   tagStyle: {
     paddingTop: 10,
     paddingBottom: 40,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     alignSelf: "center",
-    marginLeft: 2,
-    marginRight: 2,
+    // marginLeft: 2,
+    //marginRight: 2,
     marginBottom: 2,
     marginTop: 2,
   },
@@ -187,15 +192,16 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     marginBottom: 20,
-    marginTop: 10,
+    marginRight: 2,
+    // marginTop: 10,
   },
   showUpVoteText: {
     fontWeight: "bold",
     fontSize: 16,
     paddingRight: 2,
     marginRight: 2,
-    marginBottom: 2,
-    marginTop: 2,
+    // `marginBottom: 2,
+    // marginTop: 2,
     color: "white",
   },
 });
