@@ -1,3 +1,8 @@
+// This is the bottom tab nagigator file
+// This file is importer into every page on the app
+// This file create a bottom tab navigator in the app
+// that lets the user navigate between different pages/screens.
+
 import * as React from 'react';
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import { NavigationContainer, TabActions } from '@react-navigation/native';
@@ -18,6 +23,8 @@ export default function Tabs() {
    
     <Tab.Navigator
       screenOptions={{
+        // headerShown:false,
+        
         tabBarShowLabel:false,
         tabBarStyle: {
           position: 'absolute',
@@ -72,7 +79,7 @@ export default function Tabs() {
           </View>
         )
       }} />
-      <Tab.Screen name='ProfileScreen' component={ProfileScreen} options= {{
+      {/* <Tab.Screen name='ProfileScreen' component={ProfileScreen} options= {{
         tabBarIcon:({focused}) => (
           <View style={{alignItems:'center', justifyContent:'center',}}>
             <Image 
@@ -90,7 +97,7 @@ export default function Tabs() {
             }}>Profile</Text>
           </View>
         )
-      }}/>
+      }}/> */}
     </Tab.Navigator>
   );
 

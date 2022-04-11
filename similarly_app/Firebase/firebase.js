@@ -1,3 +1,7 @@
+// This the the Firebase database file.
+// In this file I am configuring firebase 
+// and fetching realtime database refference
+
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref,set, onValue, get, child } from "firebase/database";
 import { getAuth } from "firebase/auth";

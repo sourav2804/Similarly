@@ -1,6 +1,10 @@
+// In this file I fetch the stored tag data from firebase
+// and display it in a flatlist view within explore screen
+// ==============================================================
+
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref,set, onValue, get, child } from "firebase/database";
-import db from '../Firebase/firebase';
+import { getDatabase, ref, set, onValue, get, child } from "firebase/database";
+import db from "../Firebase/firebase";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import {
@@ -12,41 +16,127 @@ import {
   FlatList,
   TouchableOpacity,
   Button,
+  ImageBackground,
 } from "react-native";
 
 import Tags from "./Tags";
 
+// ==============================================================
+// This is the  default function of this file
+// which contains a flatlist view that displays all
+// the user tags fetched from database.
+// This file is also connected to bottom tab navigator
+// that navigates between different screens
+// ==============================================================
+
 export default function ExploreScreen({ navigation }) {
   const [tagItems, setTagItems] = useState([]);
 
- 
   const tagTableRef = ref(db, "/tagTable/");
- 
-   useEffect (()=>{
+
+  // ==============================================================
+  // useEffect hook was used to execute
+  // the code inside only when the app renders
+  // ==============================================================
+  useEffect(() => {
     onValue(tagTableRef, (snapshot) => {
       const data = snapshot.val();
       // setTagItems([...tagItems, data]);
-      setTagItems( data);
+      setTagItems(data);
 
-      console.log(data);
+      //console.log(data);
     });
-  },[]);
- 
-//  console.log(tagItems);
+  }, []);
 
+  let upVotePressed = false;
+
+// ==============================================================
+   // upVote function was used to keep track of 
+   // the UpVote counts on a particular tag.
+   // Everytime this function is called, 
+   // the upvote count of a particular tag gets updated.
+// ==============================================================
+
+  const upVote = (tagId, tagItem) => {
+    //console.log('upVotePressed before',upVotePressed)
+    upVotePressed = !upVotePressed;
+    //console.log('upVotePressed after',upVotePressed)
+    let upVoteCount;
+
+    const tagTableRef = ref(db, "/tagTable/" + tagId + "/upVoteCount");
+    //let length=0 ;
+
+// ==============================================================
+    // Firebase function that allows to 
+    // get hold of a value in the database table.
+// ==============================================================
+    onValue(tagTableRef, (snapshot) => {
+      // const data = snapshot.val();
+      upVoteCount = snapshot.val();
+      //length = data.length;
+      // console.log('length',length);
+      console.log("upVoteCount", upVoteCount);
+      //upVoteCount=data;
+    });
+    if (upVotePressed) {
+      upVoteCount++;
+    } else {
+      upVoteCount--;
+    }
+
+    //console.log(upVoteCount, "upVoteCount after snap");
+
+// ==============================================================
+   // Firebase function that allows to change
+   //  a database value at a particular path.
+// ==============================================================
+    set(ref(db, "tagTable/" + tagId), {
+      tagItem: tagItem,
+      tagId: tagId,
+      upVoteCount: upVoteCount,
+    });
+  };
+
+// ==========================================================================
+   // This function is used to fetch the UpVote count of a particular tag 
+   //and render it in a view so the user can see the UpVote count of any Tags
+// ==========================================================================
+  const showUpVote = (tagId) => {
+    const tagTableRef = ref(db, "/tagTable/" + tagId + "/upVoteCount");
+    let count;
+    onValue(tagTableRef, (snapshot) => {
+      count = snapshot.val();
+    });
+
+    return (
+      <View style={styles.showUpVote}>
+        <Text style={styles.showUpVoteText}>❤️ {count}</Text>
+      </View>
+    );
+  };
+
+  let count = 0;
   return (
     <View style={styles.container}>
-      <View style={styles.exploreTagArea}>
+      <ImageBackground
+        source={require("../assets/wallpaper/explore.jpg")}
+        resizeMode="cover"
+        style={styles.exploreTagArea}
+      >
+        {/* <View style={styles.exploreTagArea}> */}
 
-      <FlatList
-            style={styles.tagStyle}
-            data={tagItems}
-            keyExtractor={(item)=> item.id}
-            renderItem={({ item }) => (
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Tags text={item.tagItem} />
-                <TouchableOpacity  onPress={() => removeTags()}>
-                  <Image
+        <FlatList
+          style={styles.tagStyle}
+          data={tagItems}
+          //numColumns={2}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Tags text={item.tagItem} />
+              <TouchableOpacity
+                onPress={() => upVote(item.tagId, item.tagItem)}
+              >
+                {/* <Image
                     source={require("../assets/Icons/delete.png")}
                     resizeMode="contain"
                     style={{
@@ -55,13 +145,14 @@ export default function ExploreScreen({ navigation }) {
                       marginBottom: 20,
                       marginTop: 10,
                     }}
-                  />
-                </TouchableOpacity>
-              </View>
-            )}
-          />
-
-      </View>
+                  /> */}
+                {showUpVote(item.tagId)}
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      </ImageBackground>
+      {/* </View> */}
     </View>
   );
 }
@@ -72,55 +163,39 @@ const styles = StyleSheet.create({
   },
 
   exploreTagArea: {
+    // flex: 3,
+    // backgroundColor: "lightsteelblue",
+    // // alignItems: "center",
+    // justifyContent: "center",
+    // marginBottom: 70,
     flex: 3,
-    backgroundColor: "lightsteelblue",
-    // alignItems: "center",
+    //backgroundColor: "lightslategrey",
+    paddingBottom: 70,
     justifyContent: "center",
   },
   tagStyle: {
     paddingTop: 10,
     paddingBottom: 40,
     paddingHorizontal: 10,
-    alignSelf:'center'
-  },
-
-
-  myTagArea: {
-    flex: 6,
-    backgroundColor: "lightsteelblue",
-    marginBottom: 70,
-  },
-
-  input: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    backgroundColor: "#fff",
-    borderRadius: 60,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 20,
-    marginBottom: 20,
-    borderColor: "powderblue",
-    borderWidth: 1,
-  },
-  createWrapper: {
-    backgroundColor: "lightblue",
-    height: 40,
-    width: 87,
-    justifyContent: "center",
-    borderRadius: 10,
-    marginLeft: 140,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
     alignSelf: "center",
+    marginLeft: 2,
+    marginRight: 2,
+    marginBottom: 2,
+    marginTop: 2,
   },
-  createTagArea: {
-    flex: 2,
-    backgroundColor: "lightslategrey",
+  showUpVote: {
+    height: 40,
+    width: 40,
+    marginBottom: 20,
+    marginTop: 10,
   },
-
- 
-
+  showUpVoteText: {
+    fontWeight: "bold",
+    fontSize: 16,
+    paddingRight: 2,
+    marginRight: 2,
+    marginBottom: 2,
+    marginTop: 2,
+    color: "white",
+  },
 });
