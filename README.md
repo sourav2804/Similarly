@@ -97,6 +97,50 @@ My Tag Area : It will display all the tags that the user has created and are cur
 
 Auto Deletion : Any Tag will be automatically deleted after a set number of hours (for eg 3 hours). 
 
+iOS Keyboard View: As of now the iOS keyboard layout hides the bottomtab navigator. In the future I want to add functionality that will not hide the  
+                   bottomTabNavigator on iOS devices.
+
+========
+Bug List
+========
+As of now, I am ignoring some of my console warnings which need to be addressed in future implementations.
+Here are some of the warnings I am getting right now:
+
+No 1:
+-----
+AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage
+at node_modules/react-native/Libraries/Utilities/warnOnce.js:27:2 in warnOnce
+at node_modules/react-native/index.js:300:12 in module.exports.get__AsyncStorage
+at node_modules/@firebase/util/dist/index.esm2017.js:1777:0 in <global>
+at http://142.3.95.133:19000/node_modules/expo/AppEntry.bundle?platform=android&dev=true&hot=false&strict=false&minify=false:148351:42 in <unknown>
+at node_modules/@firebase/util/dist/index.esm2017.js:1124:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1063:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1038:13 in deepEqual
+at node_modules/@firebase/util/dist/index.esm2017.js:1023:25 in deepEqual
+at http://142.3.95.133:19000/node_modules/expo/AppEntry.bundle?platform=android&dev=true&hot=false&strict=false&minify=false:150662:59 in <unknown>
+at node_modules/@firebase/util/dist/index.esm2017.js:1124:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1063:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1038:13 in deepEqual
+at node_modules/@firebase/util/dist/index.esm2017.js:1023:25 in deepEqual
+at node_modules/@firebase/auth/dist/rn/phone-31a1067a.js:551:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1124:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1063:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1038:13 in deepEqual
+at node_modules/@firebase/util/dist/index.esm2017.js:1023:25 in deepEqual
+at node_modules/@firebase/auth/dist/rn/phone-31a1067a.js:966:4 in _getFinalTarget
+at node_modules/@firebase/util/dist/index.esm2017.js:1124:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1063:0 in <global>
+at node_modules/@firebase/util/dist/index.esm2017.js:1038:13 in deepEqual
+at node_modules/@firebase/util/dist/index.esm2017.js:1023:25 in deepEqual
+
+No 2:
+-----
+Setting a timer for a long period of time, i.e. multiple minutes, is a performance and correctness issue on Android as it keeps the timer module awake, and timers can only be called when the app is in the foreground. See https://github.com/facebook/react-native/issues/12981 for more info.
+(Saw setTimeout with duration 483392ms)
+at node_modules/@firebase/database/dist/index.esm2017.js:676:30 in setTimeoutNonBlocking
+at node_modules/@firebase/database/dist/index.esm2017.js:7309:29 in StatsReporter#reportStats_
+
+
 
 
 
