@@ -1,3 +1,6 @@
+// For more Features to implement in the future.
+// Excluded as of now for CS 855 final project submission.
+
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { Component } from "react";
 import { NavigationContainer } from '@react-navigation/native';
